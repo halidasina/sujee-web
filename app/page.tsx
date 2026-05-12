@@ -53,7 +53,7 @@ const usps = [
 ]
 
 export default function Home() {
-  const waHeroMsg = 'Salam! Saya nak tanya pasal Kek Suji Klasik. Boleh share maklumat lanjut?'
+  const waHeroMsg = `Salam! Saya berminat dengan *Kek Suji Klasik*.\n\n📦 *Alamat Penghantaran:*\n[TULIS ALAMAT DI SINI]\n\nBoleh confirm saiz, stok & delivery fee?`
 
   return (
     <main className="min-h-screen" style={{ backgroundColor: '#fdf8f0' }}>
@@ -247,7 +247,7 @@ export default function Home() {
 
           <StaggerContainer className="grid md:grid-cols-2 gap-10 max-w-4xl mx-auto">
             {products.map((product) => {
-              const waMsg = `Salam! Saya nak order *${product.name}* (RM${product.price}). Boleh share alamat pickup/delivery & cara bayar?`
+              const waMsg = `Salam! Saya nak order *${product.name}* (RM${product.price}).\n\n📦 *Alamat Penghantaran:*\n[TULIS ALAMAT DI SINI]\n\nBoleh confirm stok & delivery fee?`
               return (
                 <StaggerItem key={product.id}>
                   <ScaleOnHover className="bg-white rounded-3xl overflow-hidden shadow-sm border border-[#c8973a]/10 h-full">
