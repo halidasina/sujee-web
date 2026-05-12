@@ -38,8 +38,8 @@ const products = [
 const usps = [
   {
     icon: '🌾',
-    title: 'Tepung Suji & Almond',
-    desc: 'Gabungan tepung suji & tepung almond untuk tekstur yang unik — lembut luar, moist dalam.',
+    title: 'Serbuk Suji & Badam',
+    desc: '140g serbuk suji + 110g serbuk badam — gabungan unik yang bagi tekstur lembut, moist & rasa yang kaya.',
   },
   {
     icon: '🧈',
@@ -48,8 +48,8 @@ const usps = [
   },
   {
     icon: '✨',
-    title: 'Hampir Bebas Gluten',
-    desc: 'Hanya 2 sudu besar tepung gandum — sesuai untuk yang sensitif gluten.',
+    title: 'Rendah Gluten',
+    desc: 'Hanya 14% tepung gandum (40g) berbanding 48% serbuk suji & 38% serbuk badam — lebih ringan di perut.',
   },
 ]
 
@@ -114,8 +114,8 @@ export default function Home() {
                 transition={{ duration: 0.6, delay: 0.35 }}
                 className="text-[#5c3d2e]/70 font-sans text-lg leading-relaxed mb-8"
               >
-                Resepi istimewa — tepung suji, tepung almond & butter premium.
-                Hanya 2 sudu besar tepung gandum. Lembut, moist & meleleh di mulut.
+                Resepi istimewa — 48% serbuk suji, 38% serbuk badam & hanya 14% tepung gandum.
+                Ditambah butter premium untuk rasa yang kaya. Lembut, moist & meleleh di mulut.
               </motion.p>
 
               <motion.div
@@ -152,9 +152,9 @@ export default function Home() {
                 className="flex gap-8"
               >
                 {[
-                  { value: '100%', label: 'Butter Premium' },
-                  { value: '2 tbsp', label: 'Tepung Gandum Sahaja' },
-                  { value: 'Suji+', label: 'Tepung Almond' },
+                  { value: '48%', label: 'Serbuk Suji' },
+                  { value: '38%', label: 'Serbuk Badam' },
+                  { value: '14%', label: 'Tepung Gandum' },
                 ].map((stat, i) => (
                   <div key={i} className={i > 0 ? 'border-l border-[#c8973a]/20 pl-8' : ''}>
                     <p className="text-2xl font-serif text-[#c8973a] font-bold">{stat.value}</p>
