@@ -2,7 +2,6 @@
 
 import Image from 'next/image'
 import { motion } from 'framer-motion'
-import { DeliveryCalculator } from '@/components/DeliveryCalculator'
 import { FadeIn, StaggerContainer, StaggerItem, ScaleOnHover } from '@/components/AnimatedSection'
 
 const WA_LINK = process.env.NEXT_PUBLIC_WHATSAPP_LINK || 'https://wa.link/j1c283'
@@ -248,7 +247,7 @@ export default function Home() {
 
           <StaggerContainer className="grid md:grid-cols-2 gap-10 max-w-4xl mx-auto">
             {products.map((product) => {
-              const waMsg = `Salam! Saya nak order ${product.name} (RM${product.price}). Boleh confirm stok & cara bayar?`
+              const waMsg = `Salam! Saya nak order *${product.name}* (RM${product.price}). Boleh share alamat pickup/delivery & cara bayar?`
               return (
                 <StaggerItem key={product.id}>
                   <ScaleOnHover className="bg-white rounded-3xl overflow-hidden shadow-sm border border-[#c8973a]/10 h-full">
@@ -302,9 +301,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* DELIVERY CALCULATOR */}
-      <DeliveryCalculator />
-
       {/* FOOTER */}
       <footer className="bg-[#5c3d2e] text-white py-12 px-6">
         <div className="max-w-6xl mx-auto">
@@ -355,8 +351,8 @@ export default function Home() {
               <ol className="space-y-2 font-sans text-sm text-white/70">
                 {[
                   'Pilih saiz kek (450gm / 1kg)',
-                  'Check delivery fee di atas',
-                  'Klik Order via WhatsApp',
+                  'Klik butang Order via WhatsApp',
+                  'Kami confirm stok & delivery fee',
                   'Buat bayaran & tunggu penghantaran',
                 ].map((step, i) => (
                   <li key={i} className="flex gap-2">
