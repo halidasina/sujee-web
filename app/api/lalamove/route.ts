@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createHmac } from 'crypto'
 
 export const runtime = 'nodejs'
-export const maxDuration = 30
+export const maxDuration = 10
 
 const API_KEY = process.env.LALAMOVE_API_KEY!
 const API_SECRET = process.env.LALAMOVE_API_SECRET!
@@ -65,7 +65,7 @@ export async function POST(req: NextRequest) {
         'X-Request-ID': `suji-${timestamp}`,
       },
       body,
-      signal: AbortSignal.timeout(15000),
+      signal: AbortSignal.timeout(8000),
     })
 
     const data = await response.json()
