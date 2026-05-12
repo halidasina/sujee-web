@@ -26,8 +26,8 @@ const products = [
     badge: 'Best Seller',
   },
   {
-    id: '1kg',
-    name: 'Kek Suji Klasik 1kg',
+    id: '950gm',
+    name: 'Kek Suji Klasik 950gm',
     price: 95,
     image: '/images/cake-1kg.jpg',
     description: 'Saiz premium untuk majlis & hadiah istimewa. Cukup untuk 10–12 orang.',
@@ -345,7 +345,7 @@ export default function Home() {
                         : 'border-[#c8973a]/20 bg-white hover:border-[#c8973a]/50'
                     }`}
                   >
-                    <p className="font-sans text-sm font-semibold text-[#5c3d2e]">{p.id === '450gm' ? '450gm' : '1kg'}</p>
+                    <p className="font-sans text-sm font-semibold text-[#5c3d2e]">{p.id === '450gm' ? '450gm' : '950gm'}</p>
                     <p className="font-serif text-xl text-[#c8973a] font-bold">RM {p.price}</p>
                     <p className="font-sans text-xs text-[#5c3d2e]/60 mt-1">{p.description}</p>
                   </button>
