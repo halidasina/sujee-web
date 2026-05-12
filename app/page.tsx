@@ -68,9 +68,7 @@ export default function Home() {
     }, 50)
   }
 
-  const waMsg = address.trim()
-    ? `Salam! Saya nak order *${selectedProduct.name}* (RM${selectedProduct.price}).\n\n📦 *Alamat Penghantaran:*\n${address}\n\nBoleh confirm stok & delivery fee?`
-    : `Salam! Saya nak order *${selectedProduct.name}* (RM${selectedProduct.price}).\n\n📦 *Alamat Penghantaran:*\n[TULIS ALAMAT DI SINI]\n\nBoleh confirm stok & delivery fee?`
+  const waMsg = `Salam! Saya nak order *${selectedProduct.name}* (RM${selectedProduct.price}).\n\n📦 *Alamat Penghantaran:*\n${address}\n\nBoleh tolong check delivery fee?`
 
   return (
     <main className="min-h-screen" style={{ backgroundColor: '#fdf8f0' }}>
