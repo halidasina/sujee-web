@@ -31,6 +31,15 @@ export function DeliveryCalculator() {
   const waOrderUrl = (msg: string) =>
     WA_NUMBER ? `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}` : WA_LINK
 
+  async function geocode(query: string) {
+    const res = await fetch(
+      `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=1&countrycodes=my`,
+      { headers: { 'Accept-Language': 'ms' } }
+    )
+    const data = await res.json()
+    return data?.length > 0 ? data[0] : null
+  }
+
   async function calculateDelivery() {
     if (!address.trim()) return
 
@@ -38,19 +47,31 @@ export function DeliveryCalculator() {
     setResult(null)
 
     try {
-      const geoRes = await fetch(
-        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(address + ', Malaysia')}&format=json&limit=1`,
-        { headers: { 'Accept-Language': 'ms' } }
-      )
-      const geoData = await geoRes.json()
+      // Extract postcode from address (5-digit number)
+      const postcodeMatch = address.match(/\b\d{5}\b/)
+      const postcode = postcodeMatch ? postcodeMatch[0] : null
 
-      if (!geoData || geoData.length === 0) {
-        setResult({ fee: null, currency: 'MYR', error: 'Alamat tidak dijumpai. Cuba masukkan alamat yang lebih tepat.' })
+      // Try geocoding in order: full address → postcode only → area name
+      let geoResult = await geocode(address + ', Malaysia')
+
+      if (!geoResult && postcode) {
+        geoResult = await geocode(postcode + ', Malaysia')
+      }
+
+      if (!geoResult) {
+        // Try last part of address (e.g. "Kajang, Selangor")
+        const parts = address.split(',')
+        const shortAddr = parts.slice(-2).join(',').trim() + ', Malaysia'
+        geoResult = await geocode(shortAddr)
+      }
+
+      if (!geoResult) {
+        setResult({ fee: null, currency: 'MYR', error: 'Alamat tidak dijumpai. Cuba masukkan poskod + negeri sahaja. Contoh: 43000 Kajang, Selangor' })
         setLoading(false)
         return
       }
 
-      const { lat, lon, display_name } = geoData[0]
+      const { lat, lon, display_name } = geoResult
 
       if (!isInCoverage(display_name)) {
         setResult({
