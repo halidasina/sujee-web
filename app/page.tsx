@@ -466,7 +466,7 @@ export default function Home() {
               <h4 className="font-sans text-xs uppercase tracking-widest text-[#c8973a] mb-4">Cara Order</h4>
               <ol className="space-y-2 font-sans text-sm text-white/70">
                 {[
-                  'Pilih saiz kek (450gm / 1kg)',
+                  'Pilih saiz kek (450gm / 950gm)',
                   'Isi alamat penghantaran',
                   'Klik "Hantar Order via WhatsApp"',
                   'Kami confirm delivery fee & bayaran',
