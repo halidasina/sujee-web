@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
-import crypto from 'crypto'
+import { createHmac } from 'crypto'
+
+export const runtime = 'nodejs'
+export const maxDuration = 30
 
 const API_KEY = process.env.LALAMOVE_API_KEY!
 const API_SECRET = process.env.LALAMOVE_API_SECRET!
@@ -11,7 +14,7 @@ const PICKUP_ADDRESS = process.env.PICKUP_ADDRESS || '26, Jalan Taman Bangi Aven
 
 function generateSignature(method: string, path: string, body: string, timestamp: string) {
   const rawSignature = `${timestamp}\r\n${method}\r\n${path}\r\n\r\n${body}`
-  return crypto.createHmac('sha256', API_SECRET).update(rawSignature).digest('hex')
+  return createHmac('sha256', API_SECRET).update(rawSignature).digest('hex')
 }
 
 export async function POST(req: NextRequest) {
@@ -64,6 +67,7 @@ export async function POST(req: NextRequest) {
         'X-Request-ID': `suji-${timestamp}`,
       },
       body,
+      signal: AbortSignal.timeout(15000),
     })
 
     const data = await response.json()
