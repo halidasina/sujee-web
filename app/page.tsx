@@ -313,6 +313,20 @@ export default function Home() {
             <p className="text-[#5c3d2e]/70 mt-3 font-sans text-sm">
               Pilih saiz & masukkan alamat — kami akan confirm delivery fee terus via WhatsApp
             </p>
+
+            {/* Info badges */}
+            <div className="mt-6 flex flex-wrap justify-center gap-3">
+              {[
+                { icon: '🍰', text: 'Bake to Order' },
+                { icon: '🕕', text: 'Order sebelum 6pm' },
+                { icon: '🚀', text: 'Next Day Delivery' },
+              ].map((item) => (
+                <div key={item.text} className="flex items-center gap-2 bg-[#c8973a]/10 border border-[#c8973a]/30 rounded-full px-4 py-2">
+                  <span className="text-sm">{item.icon}</span>
+                  <span className="text-xs font-sans text-[#5c3d2e] font-medium">{item.text}</span>
+                </div>
+              ))}
+            </div>
           </FadeIn>
 
           <FadeIn>
