@@ -50,8 +50,6 @@ export async function POST(req: NextRequest) {
       item: {
         quantity: '1',
         weight: 'LESS_THAN_3KG',
-        categories: ['FOOD_DELIVERY'],
-        handlingInstructions: ['KEEP_UPRIGHT'],
       },
     }
 
@@ -73,9 +71,9 @@ export async function POST(req: NextRequest) {
     const data = await response.json()
 
     if (!response.ok) {
-      console.error('Lalamove error:', JSON.stringify(data))
-      const llmMsg = data?.message || data?.error || 'Tidak dapat calculate delivery fee.'
-      return NextResponse.json({ error: llmMsg }, { status: response.status })
+      console.error('Lalamove error:', response.status, JSON.stringify(data))
+      const llmMsg = data?.message || data?.error || `Lalamove error ${response.status}`
+      return NextResponse.json({ error: llmMsg, debug: data })
     }
 
     const priceBreakdown = data.priceBreakdown
