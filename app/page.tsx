@@ -127,8 +127,9 @@ export default function Home() {
                 transition={{ duration: 0.6, delay: 0.35 }}
                 className="text-[#5c3d2e]/70 font-sans text-lg leading-relaxed mb-8"
               >
-                Resepi istimewa — 48% serbuk suji, 38% serbuk badam & hanya 14% tepung gandum.
-                Ditambah butter premium untuk rasa yang kaya. Lembut, moist & meleleh di mulut.
+                Kek Sujee kami menggunakan mentega premium, tepung suji & almond berkualiti tinggi.
+                Rasanya lemak, wangi dan tidak terlalu manis.
+                Teksturnya unik — sedikit berbiji tetapi lembut dan moist di dalam.
               </motion.p>
 
               <motion.div
