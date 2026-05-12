@@ -8,6 +8,19 @@ interface DeliveryResult {
   error?: string
 }
 
+const COVERAGE_AREAS = [
+  'kuala lumpur', 'wilayah persekutuan',
+  'selangor', 'shah alam', 'petaling jaya', 'subang', 'klang',
+  'ampang', 'cheras', 'puchong', 'sepang', 'kajang', 'semenyih',
+  'rawang', 'gombak', 'kepong', 'damansara', 'bangsar', 'mont kiara',
+  'sri petaling', 'bukit jalil', 'cyberjaya', 'putrajaya',
+]
+
+function isInCoverage(displayName: string): boolean {
+  const lower = displayName.toLowerCase()
+  return COVERAGE_AREAS.some((area) => lower.includes(area))
+}
+
 export function DeliveryCalculator() {
   const [address, setAddress] = useState('')
   const [loading, setLoading] = useState(false)
@@ -25,7 +38,6 @@ export function DeliveryCalculator() {
     setResult(null)
 
     try {
-      // Geocode address using free Nominatim API
       const geoRes = await fetch(
         `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(address + ', Malaysia')}&format=json&limit=1`,
         { headers: { 'Accept-Language': 'ms' } }
@@ -38,16 +50,22 @@ export function DeliveryCalculator() {
         return
       }
 
-      const { lat, lon } = geoData[0]
+      const { lat, lon, display_name } = geoData[0]
+
+      if (!isInCoverage(display_name)) {
+        setResult({
+          fee: null,
+          currency: 'MYR',
+          error: 'Maaf, penghantaran hanya untuk kawasan Kuala Lumpur & Selangor sahaja.',
+        })
+        setLoading(false)
+        return
+      }
 
       const res = await fetch('/api/lalamove', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          deliveryLat: lat,
-          deliveryLng: lon,
-          deliveryAddress: address,
-        }),
+        body: JSON.stringify({ deliveryLat: lat, deliveryLng: lon, deliveryAddress: address }),
       })
 
       const data = await res.json()
@@ -65,8 +83,8 @@ export function DeliveryCalculator() {
   }
 
   const orderMessage = result?.fee
-    ? `Salam! Saya nak order Kek Suji Premium. Alamat penghantaran saya: ${address}. Delivery fee: RM${result.fee}. Boleh confirm order?`
-    : `Salam! Saya nak order Kek Suji Premium. Alamat penghantaran: ${address}`
+    ? `Salam! Saya nak order Kek Suji Klasik. Alamat penghantaran: ${address}. Delivery fee (Lalamove): RM${result.fee}. Boleh confirm order?`
+    : `Salam! Saya nak order Kek Suji Klasik. Alamat penghantaran: ${address}`
 
   return (
     <section id="delivery" className="py-20 bg-white">
@@ -77,8 +95,16 @@ export function DeliveryCalculator() {
             Check Delivery Fee
           </h2>
           <p className="text-[#5c3d2e]/70 mt-3 font-sans text-sm">
-            Penghantaran via Lalamove ke seluruh Klang Valley
+            Penghantaran via Lalamove
           </p>
+
+          {/* Coverage badge */}
+          <div className="mt-4 inline-flex items-center gap-2 bg-[#c8973a]/10 border border-[#c8973a]/30 rounded-full px-4 py-2">
+            <span className="w-2 h-2 rounded-full bg-green-500 inline-block"></span>
+            <span className="text-xs font-sans text-[#5c3d2e] font-medium">
+              Kuala Lumpur & Selangor sahaja
+            </span>
+          </div>
         </div>
 
         <div className="bg-[#fdf8f0] rounded-2xl p-8 shadow-sm border border-[#c8973a]/20">
@@ -87,7 +113,7 @@ export function DeliveryCalculator() {
           </label>
           <textarea
             value={address}
-            onChange={(e) => setAddress(e.target.value)}
+            onChange={(e) => { setAddress(e.target.value); setResult(null) }}
             placeholder="Contoh: No 12, Jalan Ampang, 50450 Kuala Lumpur"
             rows={3}
             className="w-full border border-[#c8973a]/30 rounded-xl p-4 text-sm font-sans text-[#5c3d2e] bg-white focus:outline-none focus:border-[#c8973a] resize-none"
@@ -104,8 +130,13 @@ export function DeliveryCalculator() {
           {result && (
             <div className="mt-6">
               {result.error ? (
-                <div className="text-center p-4 bg-red-50 rounded-xl border border-red-200">
+                <div className="text-center p-5 bg-red-50 rounded-xl border border-red-200">
                   <p className="text-red-600 font-sans text-sm">{result.error}</p>
+                  {result.error.includes('KL') || result.error.includes('Selangor') ? (
+                    <p className="text-red-400 font-sans text-xs mt-2">
+                      Untuk kawasan lain, hubungi kami terus di WhatsApp.
+                    </p>
+                  ) : null}
                 </div>
               ) : (
                 <div className="text-center p-6 bg-[#c8973a]/10 rounded-xl border border-[#c8973a]/30">
@@ -114,7 +145,7 @@ export function DeliveryCalculator() {
                     RM {result.fee}
                   </p>
                   <p className="text-xs font-sans text-[#5c3d2e]/50 mt-2">
-                    * Harga mungkin berbeza mengikut permintaan semasa
+                    * Harga mungkin berbeza mengikut permintaan semasa Lalamove
                   </p>
 
                   <a
