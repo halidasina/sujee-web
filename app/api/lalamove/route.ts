@@ -5,9 +5,9 @@ const API_KEY = process.env.LALAMOVE_API_KEY!
 const API_SECRET = process.env.LALAMOVE_API_SECRET!
 const BASE_URL = process.env.LALAMOVE_BASE_URL || 'https://rest.lalamove.com'
 
-const PICKUP_LAT = process.env.PICKUP_LAT || '3.1390'
-const PICKUP_LNG = process.env.PICKUP_LNG || '101.6869'
-const PICKUP_ADDRESS = process.env.PICKUP_ADDRESS || 'Kuala Lumpur'
+const PICKUP_LAT = process.env.PICKUP_LAT || '2.9982'
+const PICKUP_LNG = process.env.PICKUP_LNG || '101.7945'
+const PICKUP_ADDRESS = process.env.PICKUP_ADDRESS || '26, Jalan Taman Bangi Avenue 7/13, Taman Bangi Avenue, 43000 Kajang, Selangor'
 
 function generateSignature(method: string, path: string, body: string, timestamp: string) {
   const rawSignature = `${timestamp}\r\n${method}\r\n${path}\r\n\r\n${body}`
@@ -24,16 +24,23 @@ export async function POST(req: NextRequest) {
 
     const timestamp = Date.now().toString()
     const path = '/v3/quotations'
-    const body = JSON.stringify({
+
+    const requestBody = {
       serviceType: 'MOTORCYCLE',
-      language: 'ms_MY',
+      language: 'en_MY',
       stops: [
         {
-          coordinates: { lat: PICKUP_LAT, lng: PICKUP_LNG },
+          coordinates: {
+            lat: String(PICKUP_LAT),
+            lng: String(PICKUP_LNG),
+          },
           address: PICKUP_ADDRESS,
         },
         {
-          coordinates: { lat: deliveryLat, lng: deliveryLng },
+          coordinates: {
+            lat: String(deliveryLat),
+            lng: String(deliveryLng),
+          },
           address: deliveryAddress,
         },
       ],
@@ -43,8 +50,9 @@ export async function POST(req: NextRequest) {
         categories: ['FOOD_DELIVERY'],
         handlingInstructions: ['KEEP_UPRIGHT'],
       },
-    })
+    }
 
+    const body = JSON.stringify(requestBody)
     const signature = generateSignature('POST', path, body, timestamp)
 
     const response = await fetch(`${BASE_URL}${path}`, {
@@ -53,6 +61,7 @@ export async function POST(req: NextRequest) {
         'Content-Type': 'application/json',
         Authorization: `hmac ${API_KEY}:${timestamp}:${signature}`,
         'X-LLM-Country': 'MY',
+        'X-Request-ID': `suji-${timestamp}`,
       },
       body,
     })
@@ -60,10 +69,9 @@ export async function POST(req: NextRequest) {
     const data = await response.json()
 
     if (!response.ok) {
-      return NextResponse.json(
-        { error: 'Tidak dapat calculate delivery fee. Cuba semula.' },
-        { status: response.status }
-      )
+      console.error('Lalamove error:', JSON.stringify(data))
+      const llmMsg = data?.message || data?.error || 'Tidak dapat calculate delivery fee.'
+      return NextResponse.json({ error: llmMsg }, { status: response.status })
     }
 
     const priceBreakdown = data.priceBreakdown
@@ -76,7 +84,8 @@ export async function POST(req: NextRequest) {
       currency: 'MYR',
       serviceType: data.serviceType,
     })
-  } catch {
+  } catch (err) {
+    console.error('Lalamove exception:', err)
     return NextResponse.json({ error: 'Ralat sistem. Sila cuba lagi.' }, { status: 500 })
   }
 }
