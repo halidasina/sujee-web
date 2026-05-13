@@ -39,7 +39,7 @@ const usps = [
   {
     icon: '🌾',
     title: 'Serbuk Suji & Badam',
-    desc: '140g serbuk suji + 110g serbuk badam — gabungan unik yang bagi tekstur lembut, moist & rasa yang kaya.',
+    desc: '48% serbuk suji + 38% serbuk badam — gabungan unik yang bagi tekstur lembut, moist & rasa yang kaya.',
   },
   {
     icon: '🧈',
@@ -49,7 +49,7 @@ const usps = [
   {
     icon: '✨',
     title: 'Rendah Gluten',
-    desc: 'Hanya 14% tepung gandum (40g) berbanding 48% serbuk suji & 38% serbuk badam — lebih ringan di perut.',
+    desc: 'Hanya 14% tepung gandum berbanding 48% serbuk suji & 38% serbuk badam — lebih ringan di perut.',
   },
 ]
 
