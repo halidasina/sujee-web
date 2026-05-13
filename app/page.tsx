@@ -429,8 +429,7 @@ export default function Home() {
               </h3>
               <p className="font-sans text-xs text-[#c8973a]/70 mb-3 uppercase tracking-widest">by Molife Delights</p>
               <p className="font-sans text-sm text-white/60 leading-relaxed">
-                Kek suji premium dengan tepung suji, tepung almond & butter terbaik.
-                Dibuat dengan penuh kasih sayang dari Kajang, Selangor.
+                Dibakar segar atas tempahan. Menggunakan mentega premium, serbuk suji & badam terpilih — kualiti yang boleh dirasa.
               </p>
             </FadeIn>
 
